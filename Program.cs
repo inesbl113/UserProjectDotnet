@@ -7,11 +7,22 @@ builder.Services.AddDbContext<Back.Data.UserContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDatabase")));
 
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddCors(options =>
+{
+	options.AddDefaultPolicy(
+		builder =>
+		{
+			builder.WithOrigins("*")
+				.AllowAnyHeader()
+				.AllowAnyMethod();
+		});
+});
+
+
  builder.Services.AddDbContext<UserContext>();
 
 var app = builder.Build();
-
+app.UseCors();
 
 if (!app.Environment.IsDevelopment())
 {
